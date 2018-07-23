@@ -1,2 +1,8 @@
 ---
-# tasks file for ansible-role-kernel-updates
+- include_tasks: update-kernel.yml
+  when: "desired_kernel_version not in ansible_kernel"
+
+- include_tasks: update-grub.yml
+  when: "desired_kernel_version not in ansible_kernel"
+
+- include_tasks: check-restart.yml
