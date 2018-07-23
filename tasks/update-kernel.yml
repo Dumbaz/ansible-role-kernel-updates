@@ -1,0 +1,10 @@
+- name: Update kernel and kernel tools
+  yum:
+    name: "{{ kernel_packages }}"
+    state: installed
+  vars:
+    kernel_packages:
+      - kernel-{{ desired_kernel_version }}
+      - kernel-tools-{{ desired_kernel_version }}
+      - kernel-tools-libs-{{desired_kernel_version}}
+      - kernel-headers-{{ desired_kernel_version }}

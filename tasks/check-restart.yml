@@ -1,0 +1,19 @@
+- name: run needs-restarting for services
+  shell: needs-restarting -s
+  failed_when: false
+  register: services_restart_required
+  changed_when: false
+
+- name: display the services that need a restart
+  debug:
+    msg: "The following services need a restart: \n \n {{ services_restart_required.stdout_lines }}"
+
+- name: run needs-restarting for server
+  shell: needs-restarting -r
+  failed_when: false
+  register: reboot_required
+  changed_when: false
+
+- name: display wether the servers needs a rebootin
+  debug:
+    msg: "Reboot status is {{ reboot_required.stdout_lines }}"

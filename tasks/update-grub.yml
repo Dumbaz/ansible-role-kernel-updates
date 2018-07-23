@@ -1,0 +1,34 @@
+---
+- name: Get line with the desired and available kernels
+  shell: awk -F\' /^menuentry/{print\$2} /etc/grub2.cfg | grep -n {{ desired_kernel_version }}
+  register: grub_kernel_releases
+  tags:
+    - grub
+  ignore_errors: true
+
+- name: print all the grub_kernel_releases for debug
+  debug:
+    msg: "Found {{ grub_kernel_releases.stdout_lines }}"
+  when: grub_kernel_releases is succeeded
+
+# Note that grep starts counting line numbers at 1, but grub counts from 0
+- name: Get the menuentry id of our desired kernel {{ desired_kernel_version }}
+  set_fact:
+    desired_kernel_id: "{{ grub_kernel_releases.stdout_lines[0][0] | int - 1}}"
+  tags:
+    - grub
+  when: grub_kernel_releases is succeeded
+
+- name: print the correct id for the kernel we desire
+  debug:
+    msg: "The ID appears to be {{  desired_kernel_id }}"
+  when: desired_kernel_id is defined
+
+- name: Set the correct entry in grub
+  command: grub2-set-default {{ desired_kernel_id }}
+  when: desired_kernel_id is defined
+
+- name: rebuild grub config under boot
+  command: grub2-mkconfig -o /boot/grub2/grub.cfg
+
+# https://www.thegeekdiary.com/centos-rhel-7-change-default-kernel-boot-with-old-kernel/
