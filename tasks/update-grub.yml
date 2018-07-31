@@ -1,6 +1,6 @@
 ---
 - name: Get line with the desired and available kernels
-  shell: awk -F\' /^menuentry/{print\$2} /etc/grub2.cfg | grep -n {{ desired_kernel_version }}
+  shell: awk -F\' /^menuentry/{print\$2} /boot/grub2/grub.cfg | grep -n {{ desired_kernel_version }}
   register: grub_kernel_releases
   tags:
     - grub
