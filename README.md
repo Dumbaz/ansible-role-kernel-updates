@@ -7,7 +7,7 @@ Requirements
 ------------
 
 * Grub2 is in use
-* the following CLI tools: awk, grep
+* the following CLI tools: awk, grep, [needs-restarting](http://man7.org/linux/man-pages/man1/needs-restarting.1.html)
 
 Role Variables
 --------------
